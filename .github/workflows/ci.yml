@@ -27,5 +27,7 @@ jobs:
 
     - name: Run tests
       working-directory: ./backend
+      env:
+        PYTHONPATH: .
       run: |
         pytest --maxfail=1 --disable-warnings -q
