@@ -52,7 +52,7 @@ def test_expand_url(client):
         },
     )
     assert shorten_response.status_code == 201
-    short_url = shorten_response.get_json["short_url"]
+    short_url = shorten_response.get_json()["short_url"]
     code = short_url.split("/")[-1]
 
     # Now expand it back
