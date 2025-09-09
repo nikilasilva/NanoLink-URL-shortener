@@ -1,4 +1,10 @@
 # Python cache files
 app/__pycache__
+tests/__pycache__
 
 tests/.pytest_cache/
+
+
+.env
+.env.local
+.env.*.local
