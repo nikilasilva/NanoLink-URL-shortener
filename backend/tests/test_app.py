@@ -41,3 +41,25 @@ def test_shorten_url(client):
     data = response.get_json()
     assert "short_url" in data
     assert data["short_url"].startswith("http://")
+
+
+def test_expand_url(client):
+    # First shorten a URL
+    shorten_response = client.post(
+        "/shorten",
+        json={
+            "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
+        },
+    )
+    assert shorten_response.status_code == 201
+    short_url = shorten_response.get_json()["short_url"]
+    code = short_url.split("/")[-1]
+
+    # Now expand it back
+    response = client.get(f"/expand/{code}")
+    assert response.status_code == 200
+    data = response.get_json()
+    assert (
+        data["original_url"]
+        == "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
+    )
