@@ -10,7 +10,7 @@ def home():
     return jsonify({"message": "Welcome to NanoLink API <3"}), 200
 
 
-@main.route("/shorten", methods=["Post"])
+@main.route("/shorten", methods=["POST"])
 def shorten_url():
     data = request.get_json()
     original_url = data.get("url")
