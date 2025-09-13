@@ -1,0 +1,12 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install deps first
+COPY package.json package-lock.json ./
+RUN npm install --legacy-peer-deps
+
+# Mount code via volumes
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
