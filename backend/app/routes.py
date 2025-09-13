@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, current_app, request
+from flask import Blueprint, jsonify, current_app, request, redirect
 from . import db
 from .models import URL
 
@@ -30,5 +30,13 @@ def expand_url(short_code):
     url_entry = URL.query.filter_by(short_code=short_code).first()
     if url_entry:
         return jsonify({"original_url": url_entry.original_url}), 200
+    else:
+        return jsonify({"error": "Short code not found"}), 404
+    
+@main.route("/<short_code>", methods=["GET"])
+def redirect_to_original(short_code):
+    url_entry = URL.query.filter_by(short_code=short_code).first()
+    if url_entry:
+        return redirect(url_entry.original_url)
     else:
         return jsonify({"error": "Short code not found"}), 404
