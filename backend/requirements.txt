@@ -3,3 +3,5 @@ pytest
 flask-sqlalchemy
 psycopg2-binary
 dotenv
+flask-cors
+redirect
