@@ -86,8 +86,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-      - name: Install ESLint
-        run: npm install eslint
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm install
       - name: Run ESLint
         working-directory: ./frontend
         run: npm run lint
