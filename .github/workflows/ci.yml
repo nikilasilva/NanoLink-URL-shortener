@@ -104,7 +104,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker images
-        run: docker-compose build
+        run: docker compose build
 
       - name: Build backend image
         run: docker build -t nanolink-backend:ci ./backend
