@@ -34,7 +34,10 @@ def test_shorten_url(client):
     response = client.post(
         "/shorten",
         json={
-            "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
+            "url": (
+                "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                "&ab_channel=RickAstley"
+            )
         },
     )
     assert response.status_code == 201
@@ -48,7 +51,10 @@ def test_expand_url(client):
     shorten_response = client.post(
         "/shorten",
         json={
-            "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
+            "url": (
+                "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                "&ab_channel=RickAstley"
+            )
         },
     )
     assert shorten_response.status_code == 201
