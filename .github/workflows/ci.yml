@@ -103,11 +103,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker images
-        run: docker compose build
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build backend image
-        run: docker build -t nanolink-backend:ci ./backend
+      - name: Build and push backend image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-backend:latest ./backend
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-backend:latest ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-backend:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-backend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-backend:${{ github.sha }}
 
-      - name: Build frontend image
-        run: docker build -t nanolink-frontend:ci ./frontend
+      - name: Build and push frontend image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-frontend:latest ./frontend
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-frontend:latest ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-frontend:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-frontend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/nanolink-frontend:${{ github.sha }}
