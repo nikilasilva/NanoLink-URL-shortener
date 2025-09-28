@@ -19,6 +19,7 @@ services:
     container_name: frontend
     environment:
       - CHOKIDAR_USEPOLLING=true # Ensures hot reload works in Docker
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
     volumes:
       - ./frontend:/app
       - /app/node_modules

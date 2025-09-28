@@ -18,6 +18,10 @@ def shorten_url():
     if not original_url:
         return jsonify({"error": "URL is required"}), 400
 
+    # Add protocol if missing
+    if not original_url.startswith(('http://', 'https://')):
+        original_url = "https://" + original_url
+
     new_url = URL(original_url=original_url)
     db.session.add(new_url)
     db.session.commit()

@@ -15,6 +15,13 @@ export default function Home() {
 
     setIsLoading(true);
     try {
+      let urlToShorten = longUrl.trim();
+
+      // Add protocol if missing
+      if (!urlToShorten.startsWith('http://') && !urlToShorten.startsWith('https://')) {
+        urlToShorten = 'https://' + urlToShorten;
+      }
+      
       const result = await shortenUrl(longUrl);
       setShortUrl(result.short_url);
     } catch (err) {
