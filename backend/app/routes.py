@@ -1,8 +1,20 @@
 from flask import Blueprint, jsonify, request, redirect
 from . import db
 from .models import URL
+import os
 
 main = Blueprint("main", __name__)
+
+
+# Add to routes.py temporarily
+@main.route("/debug/info")
+def debug_info():
+    import socket
+    return jsonify({
+        "hostname": socket.gethostname(),
+        "base_url": os.getenv("BASE_URL", "NOT SET"),
+        "database_url": os.getenv("DATABASE_URL", "NOT SET")[:50] + "..."
+    }), 200
 
 
 @main.route("/")
@@ -26,7 +38,8 @@ def shorten_url():
     db.session.add(new_url)
     db.session.commit()
 
-    short_url = f"http://localhost:5000/{new_url.short_code}"
+    base_url = os.getenv("BASE_URL", "http://localhost:5000")
+    short_url = f"{base_url}/{new_url.short_code}"
     return jsonify({"short_url": short_url}), 201
 
 

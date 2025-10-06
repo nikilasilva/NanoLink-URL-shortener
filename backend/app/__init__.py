@@ -28,7 +28,14 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        db.create_all()
+        from .models import URL
+
+        try:
+            db.create_all()  # Ensures all models including URL are created
+            _ = URL  # Reference URL to avoid "imported but unused" error
+            print("Database tables created successfully")
+        except Exception as e:
+            print(f"Error creating tables: {e}")
 
     # Register routes
     from .routes import main

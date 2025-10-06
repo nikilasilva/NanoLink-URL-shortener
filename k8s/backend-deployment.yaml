@@ -1,0 +1,40 @@
+# backend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qr-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qr-backend
+  template:
+    metadata:
+      labels:
+        app: qr-backend
+    spec:
+      containers:
+        - name: qr-backend
+          image: nikilasilva/nanolink-backend:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://testuser:testpass@qr-postgres:5432/testdb"
+            - name: FLASK_ENV
+              value: "development"
+            - name: BASE_URL
+              value: "http://localhost:30001" # Use NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qr-backend-service
+spec:
+  type: NodePort
+  selector:
+    app: qr-backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 30001 # External access

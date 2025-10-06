@@ -1,0 +1,36 @@
+# frontend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qr-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qr-frontend
+  template:
+    metadata:
+      labels:
+        app: qr-frontend
+    spec:
+      containers:
+        - name: qr-frontend
+          image: nikilasilva/nanolink-frontend:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              value: "http://localhost:30001" # Point to backend NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qr-frontend-service
+spec:
+  type: NodePort
+  selector:
+    app: qr-frontend
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30080 # External access
