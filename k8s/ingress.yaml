@@ -3,19 +3,32 @@ kind: Ingress
 metadata:
   name: qr-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
+  ingressClassName: nginx
   rules:
     - host: nanolink.local
       http:
         paths:
-          - path: /api
-            pathType: Prefix
+          # Backend API routes with rewrite
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: qr-backend-service
                 port:
                   number: 5000
+
+          # Short URL redirects (no rewrite needed - backend handles this)
+          - path: /([a-zA-Z0-9_-]+)$
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: qr-backend-service
+                port:
+                  number: 5000
+
+          # Frontend - MUST be last, no rewrite
           - path: /
             pathType: Prefix
             backend:

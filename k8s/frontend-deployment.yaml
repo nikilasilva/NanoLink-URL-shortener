@@ -20,7 +20,7 @@ spec:
             - containerPort: 3000
           env:
             - name: NEXT_PUBLIC_API_URL
-              value: "http://localhost:30001" # Point to backend NodePort
+              value: "http://nanolink.local/api" # Point to backend NodePort
 ---
 apiVersion: v1
 kind: Service
